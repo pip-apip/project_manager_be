@@ -20,6 +20,10 @@ class ActivityCategory extends Model
 
     protected $fillable = [
         'name',
+        'qty_total',
+        'qty_recived',
+        'total_nominal',
+        'qty_nominal',
         'value',
         'note',
         'images',

@@ -212,10 +212,10 @@ class ProjectTeamController extends Controller
         }
     }
 
-    public function delete($projectId): JsonResponse
+    public function delete($projectTeamsId): JsonResponse
     {
         try {
-            $projectTeams = ProjectTeam::where('project_id', $projectId)->get();
+            $projectTeams = ProjectTeam::where('id', $projectTeamsId)->get();
 
             if ($projectTeams->isEmpty()) {
                 return Response::handler(
@@ -227,7 +227,7 @@ class ProjectTeamController extends Controller
                 );
             }
 
-            ProjectTeam::where('project_id', $projectId)->delete();
+            ProjectTeam::where('id', $projectTeamsId)->delete();
 
             return Response::handler(
                 200,

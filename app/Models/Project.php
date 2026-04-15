@@ -92,4 +92,15 @@ class Project extends Model
     {
         return $this->hasMany(CharteredAccountant::class, 'project_id', 'id');
     }
+
+    public function supportTeams()
+    {
+        return $this->hasMany(ProjectTeam::class, 'project_id')
+            ->whereHas('user')
+            ->with('user')
+            ->orderBy(
+                User::select('name')
+                    ->whereColumn('tm_users.id', 'tr_project_teams.user_id')
+            );
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProjectResource extends JsonResource
+class ProjectResourceDetail extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -42,7 +42,14 @@ class ProjectResource extends JsonResource
             'specktech' => $this->activityCategories->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'name' => $category->name
+                    'name' => $category->name,
+                    'qty_total' => $category->qty_total,
+                    'qty_recived' => $category->qty_recived,
+                    'total_nominal' => $category->total_nominal,
+                    'qty_nominal' => $category->qty_nominal,
+                    'percentage' => $category->value,
+                    'note' => $category->note,
+                    'images' => $category->images
                 ];
             }),
             'start_date' => $this->start_date,

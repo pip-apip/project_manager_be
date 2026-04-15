@@ -6,6 +6,8 @@ use App\Helpers\Response;
 use App\Http\Requests\ProjectCreateRequest;
 use App\Http\Requests\ProjectUpdateRequest;
 use App\Http\Resources\ProjectResource;
+use App\Http\Resources\ProjectResourceDetail;
+use App\Http\Resources\DarProjectResource;
 use App\Models\Project;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -48,7 +50,7 @@ class ProjectController extends Controller
     public function getAll(Request $request): JsonResponse
     {
         try {
-            $projects = Project::with(['company', 'projectLeader'])
+            $projects = Project::with(['company', 'projectLeader', 'supportTeams.user'])
                 ->withoutTrashed()
                 ->orderBy('name', 'asc')
                 ->paginate($request->query('limit', 10));
@@ -80,7 +82,7 @@ class ProjectController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = Project::with(['company', 'projectLeader']);
+            $query = Project::with(['company', 'projectLeader', 'supportTeams.user']);
 
             $filters = $request->only([
                 'name', 'id', 'status', 'company_id', 'project_leader_id'
@@ -167,7 +169,7 @@ class ProjectController extends Controller
     public function getById($id): JsonResponse
     {
         try {
-            $project = Project::with(['company', 'projectLeader'])->find($id);
+            $project = Project::with(['company', 'projectLeader', 'supportTeams.user'])->find($id);
 
             if (!$project) {
                 return Response::handler(
@@ -182,7 +184,38 @@ class ProjectController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data proyek',
-                [ProjectResource::make($project)]
+                [ProjectResourceDetail::make($project)]
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Gagal mengambil data proyek',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
+    public function darProjectById($id): JsonResponse
+    {
+        try {
+            $project = Project::with(['company', 'projectLeader', 'activityCategories'])->find($id);
+
+            if (!$project) {
+                return Response::handler(
+                    400,
+                    'Gagal mengambil data proyek',
+                    [],
+                    [],
+                    'Data proyek tidak ditemukan.'
+                );
+            }
+
+            return Response::handler(
+                200,
+                'Berhasil mengambil data proyek',
+                [DarProjectResource::make($project)]
             );
         } catch (\Exception $err) {
             return Response::handler(

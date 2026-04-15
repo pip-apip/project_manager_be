@@ -42,6 +42,12 @@ class ActivityCategoryController extends Controller
                 );
             }
 
+            $request->merge([
+                'qty_nominal' => $request->qty_total != 0
+                    ? $request->total_nominal / $request->qty_total
+                    : 0
+            ]);
+
             $activityCategory = ActivityCategory::create($request->all());
 
             return Response::handler(
@@ -211,8 +217,57 @@ class ActivityCategoryController extends Controller
                 }
             }
 
+            if($request->has('qty_total') && $request->has('total_nominal')) {
+                $request->merge([
+                    'qty_nominal' => $request->qty_total != 0
+                        ? $request->total_nominal / $request->qty_total
+                        : 0
+                ]);
+            }else if($request->has('qty_total') && ($activityCategory->total_nominal !== null)) {
+                $request->merge([
+                    'qty_nominal' => $request->qty_total != 0
+                        ? ($activityCategory->total_nominal ?? 0) / $request->qty_total
+                        : 0
+                ]);
+            }else if($request->has('total_nominal') && ($activityCategory->qty_total !== null)) {
+                $request->merge([
+                    'qty_nominal' => $activityCategory->qty_total != 0
+                        ? $request->total_nominal / ($activityCategory->qty_total ?? 0)
+                        : 0
+                ]);
+            }
+
+            $qty_total = $request->has('qty_total') ? $request->qty_total : $activityCategory->qty_total;
+            $qty_recived = $request->has('qty_recived') ? $request->qty_recived : $activityCategory->qty_recived;
+            $total_nominal = $request->has('total_nominal') ? $request->total_nominal : $activityCategory->total_nominal;
+            $qty_nominal = $request->has('qty_nominal') ? $request->qty_nominal : $activityCategory->qty_nominal;
+
+            if($request->has('qty_recived')) {
+                $request->merge([
+                    'qty_recived' => $request->qty_recived
+                ]);
+
+                if($qty_total !== null && $qty_recived > $qty_total) {
+                    return Response::handler(
+                        400,
+                        'Gagal mengubah data kategori aktivitas',
+                        [],
+                        [],
+                        ['qty_recived' => ['Jumlah yang diterima tidak boleh lebih besar dari jumlah total.']]
+                    );
+                }else if($total_nominal !== null || $qty_total !== null) {
+                    $request->merge([
+                        'value' => $qty_total != 0 ? ($qty_recived / $qty_total) * 100 : 0
+                    ]);
+                }
+            }
+
             $data = $request->only([
                 'name',
+                'qty_total',
+                'qty_recived',
+                'total_nominal',
+                'qty_nominal',
                 'value',
                 'note',
                 'project_id',
