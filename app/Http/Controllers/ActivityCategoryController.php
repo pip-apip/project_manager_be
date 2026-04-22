@@ -12,7 +12,6 @@ use App\Models\Project;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use function PHPUnit\Framework\isNull;
 
 class ActivityCategoryController extends Controller
@@ -45,7 +44,8 @@ class ActivityCategoryController extends Controller
             $request->merge([
                 'qty_nominal' => $request->qty_total != 0
                     ? $request->total_nominal / $request->qty_total
-                    : 0
+                    : 0,
+                'value' => $request->qty_total != 0 ? ($request->qty_recived ?? 0 / $request->qty_total) * 100 : 0
             ]);
 
             $activityCategory = ActivityCategory::create($request->all());

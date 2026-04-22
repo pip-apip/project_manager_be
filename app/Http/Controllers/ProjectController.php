@@ -181,6 +181,10 @@ class ProjectController extends Controller
                 );
             }
 
+            $project->update([
+                'progress' => $project->activityCategories()->avg('value')
+            ]);
+
             return Response::handler(
                 200,
                 'Berhasil mengambil data proyek',
