@@ -99,8 +99,17 @@ class AdminDocController extends Controller
                 }
             }
 
+            if ($request->query('extension_type')) {
+                $query->where('file', 'LIKE', "%{$request->query('extension_type')}%");
+            }
+
+            if ($request->query('sortBy') && $request->query('sortOrder')) {
+                $query->orderBy($request->query('sortBy'), $request->query('sortOrder'));
+            } else {
+                $query->orderBy('title', 'asc');
+            }
+
             $adminDocs = $query->withoutTrashed()
-                ->orderBy('title', 'asc')
                 ->paginate($request->query('limit', 10));
 
             if ($adminDocs->isEmpty()) {
