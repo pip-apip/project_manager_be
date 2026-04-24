@@ -180,10 +180,12 @@ class ProjectController extends Controller
                     'Data proyek tidak ditemukan.'
                 );
             }
-
-            $project->update([
-                'progress' => $project->activityCategories()->avg('value')
-            ]);
+            
+            if ($project->activityCategories()->exists()) {
+                $project->update([
+                    'progress' => $project->activityCategories()->avg('value')
+                ]);
+            }
 
             return Response::handler(
                 200,
