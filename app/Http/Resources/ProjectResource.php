@@ -28,7 +28,7 @@ class ProjectResource extends JsonResource
             ),
             'value' => $this->value,
             'status' => $this->status,
-            'progress' => $this->progress,
+            'progress' => $this->progress ?? 0,
             'company_id' => optional($this->company)->id,
             'company_name' => optional($this->company)->name,
             'company_address' => optional($this->company)->address,
