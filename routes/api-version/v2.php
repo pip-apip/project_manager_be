@@ -12,6 +12,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
+use App\Http\Controllers\TimelinesController;
 use App\Http\Controllers\UploadChunkController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -110,6 +111,14 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     // Upload Chunk
     Route::post('/upload-chunks', [UploadChunkController::class, 'create']);
     Route::delete('/upload-chunks', [UploadChunkController::class, 'delete']);
+
+    // Timelines
+    Route::post('/timelines', [TimelinesController::class, 'create']);
+    Route::get('/timelines', [TimelinesController::class, 'getAll']);
+    Route::get('/timelines/search', [TimelinesController::class, 'search']);
+    Route::get('/timelines/{id}', [TimelinesController::class, 'getById']);
+    Route::patch('/timelines/{id}', [TimelinesController::class, 'update']);
+    Route::delete('/timelines/{id}', [TimelinesController::class, 'softDelete']);
 
     // Chartered Accountant
     Route::post('/chartered-accountants', [CharteredAccountantController::class, 'create']);

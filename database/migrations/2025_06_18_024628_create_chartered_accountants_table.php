@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tp_6_chartered_accountants', function (Blueprint $table) {
+        Schema::create('tp_7_chartered_accountants', function (Blueprint $table) {
             $table->id();
             $table->date('application_date');
             $table->string('classification');
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('tp_6_chartered_accountants');
+        Schema::dropIfExists('tp_7_chartered_accountants');
     }
 };
