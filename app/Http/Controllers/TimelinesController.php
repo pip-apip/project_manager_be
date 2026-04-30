@@ -116,6 +116,7 @@ class TimelinesController extends Controller
     public function update(TimelinesUpdateRequest $request, $id): JsonResponse
     {
         try {
+            dd($request->all());
             $timeline = Timeline::find($id);
 
             if (!$timeline) {
