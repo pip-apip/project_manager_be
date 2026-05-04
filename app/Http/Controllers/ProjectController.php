@@ -180,10 +180,25 @@ class ProjectController extends Controller
                     'Data proyek tidak ditemukan.'
                 );
             }
-            
-            if ($project->activityCategories()->exists()) {
+
+            $projectValue = $project->value ?? 0;
+            $spektek = $project->activityCategories;
+
+            if ($spektek->isNotEmpty() && $projectValue > 0) {
+
+                $total = 0;
+
+                foreach ($spektek as $item) {
+                    $qtyReceived = $item->qty_recived ?? 0;
+                    $qtyNominal  = $item->qty_nominal ?? 0;
+
+                    $total += ($qtyReceived * $qtyNominal);
+                }
+                
+                $progress = ($total / $projectValue) * 100;
+
                 $project->update([
-                    'progress' => $project->activityCategories()->avg('value')
+                    'progress' => $progress
                 ]);
             }
 
