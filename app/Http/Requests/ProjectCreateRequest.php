@@ -32,7 +32,7 @@ class ProjectCreateRequest extends FormRequest
             'contract_date' => 'required|date',
             'client' => 'required|string|max:100',
             'ppk' => 'required|string|max:100',
-            'support_teams' => 'required|array',
+            'support_teams' => 'sometimes|array',
             'support_teams.*' => 'string',
             'value' => 'required|numeric',
             'company_id' => [
@@ -45,7 +45,7 @@ class ProjectCreateRequest extends FormRequest
             ],
             'start_date' => 'required|date|before_or_equal:end_date',
             'end_date' => 'required|date|after_or_equal:start_date',
-            'maintenance_date' => 'required|date',
+            'maintenance_date' => 'sometimes|date',
         ];
     }
 
