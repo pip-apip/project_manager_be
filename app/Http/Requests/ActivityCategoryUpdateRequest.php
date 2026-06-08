@@ -36,6 +36,10 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'replace_images.*' => 'required|string',
             'remove_images' => 'sometimes|array',
             'remove_images.*' => 'required|string',
+            'type' => [
+                'sometimes', 'required',
+                Rule::in(['hardware', 'software']),
+            ],
             'project_id' => [
                 'sometimes', 'required',
                 Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
@@ -69,6 +73,9 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'remove_images.*.required' => 'Setiap item harus diisi.',
             'remove_images.*.string' => 'Setiap item harus berupa string.',
 
+            'type.required' => 'Tipe wajib dipilih.',
+            'type.exists' => 'Tipe tidak valid.',
+
             'project_id.required' => 'Proyek wajib dipilih.',
             'project_id.exists' => 'Proyek tidak ditemukan atau sudah dihapus.',
         ];
@@ -86,12 +93,20 @@ class ActivityCategoryUpdateRequest extends FormRequest
             $data['value'] = strip_tags($this->value);
         }
 
+        if ($this->has('description')) {
+            $data['description'] = strip_tags($this->description);
+        }
+
         if ($this->has('note')) {
             $data['note'] = strip_tags($this->note);
         }
 
         if ($this->has('project_id')) {
             $data['project_id'] = strip_tags($this->project_id);
+        }
+
+        if ($this->has('type')) {
+            $data['type'] = strip_tags($this->type);
         }
 
         $this->merge($data);

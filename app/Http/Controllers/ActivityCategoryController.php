@@ -271,6 +271,7 @@ class ActivityCategoryController extends Controller
                 'description',
                 'value',
                 'note',
+                'type',
                 'project_id',
             ]);
 

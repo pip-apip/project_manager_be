@@ -27,6 +27,7 @@ class ActivityCategoryResource extends JsonResource
             'images' => is_array($this->images)
                 ? array_map(fn($image) => $image, $this->images)
                 : [],
+            'type' => $this->type,
             'project_id' => $this->project->id ?? 0,
             'project_name' => $this->project->name ?? '',
             'created_at' => $this->created_at,

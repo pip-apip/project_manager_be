@@ -28,6 +28,7 @@ class ActivityCategory extends Model
         'description',
         'note',
         'images',
+        'type',
         'project_id'
     ];
 
