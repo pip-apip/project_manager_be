@@ -268,6 +268,7 @@ class ActivityCategoryController extends Controller
                 'qty_recived',
                 'total_nominal',
                 'qty_nominal',
+                'description',
                 'value',
                 'note',
                 'project_id',

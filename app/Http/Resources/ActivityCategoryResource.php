@@ -22,6 +22,7 @@ class ActivityCategoryResource extends JsonResource
             'total_nominal' => (int) $this->total_nominal ?? 0,
             'qty_nominal' => (int) $this->qty_nominal ?? 0,
             'percentage' => (int) $this->value ?? 0,
+            'description' => $this->description ?? '',
             'note' => $this->note ?? '',
             'images' => is_array($this->images)
                 ? array_map(fn($image) => $image, $this->images)

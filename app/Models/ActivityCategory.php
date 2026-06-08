@@ -25,6 +25,7 @@ class ActivityCategory extends Model
         'total_nominal',
         'qty_nominal',
         'value',
+        'description',
         'note',
         'images',
         'project_id'
