@@ -32,6 +32,7 @@ class CompanyController extends Controller
             }
 
             $filePath = 'companies/default.png';
+            $filePathLetterHead = 'companies/letter_head/default.png';
 
             if ($request->hasFile('director_signature')) {
                 $fileData = File::generate($request->file('director_signature'), 'companies');
@@ -39,11 +40,18 @@ class CompanyController extends Controller
                 $filePath = $request->file('director_signature')->storeAs($fileData['path'], $fileData['fileName'], 'public');
             }
 
+            if ($request->hasFile('letter_head')) {
+                $fileData = File::generate($request->file('letter_head'), 'companies/letter_head');
+
+                $filePathLetterHead = $request->file('letter_head')->storeAs($fileData['path'], $fileData['fileName'], 'public');
+            }
+
             $company = Company::create([
                 'name' => $request->name,
                 'address' => $request->address,
                 'director_name' => $request->director_name,
                 'director_signature' => $filePath,
+                'letter_head' => $filePathLetterHead,
                 'established_date' => $request->established_date
             ]);
 
@@ -100,7 +108,7 @@ class CompanyController extends Controller
             $query = Company::query();
 
             foreach ($request->all() as $key => $value) {
-                if (in_array($key, ['name', 'address', 'director_name', 'director_phone'])) {
+                if (in_array($key, ['name', 'address', 'director_name', 'letter_head', 'established_date'])) {
                     $query->where($key, 'LIKE', "%{$value}%");
                 }
             }
@@ -221,6 +229,27 @@ class CompanyController extends Controller
             }
 
             $data['director_signature'] = $company->director_signature;
+
+            $currentLetterHead = $company->letter_head ?? null;
+            $defaultLetterHead = 'companies/letter_head/default.png';
+
+            if ($request->hasFile('letter_head')) {
+                $insertLetterHead = $request->file('letter_head') ?? null;
+
+                if ($currentLetterHead && $currentLetterHead !== $defaultLetterHead) {
+                    Storage::disk('public')->delete($currentLetterHead);
+                }
+
+                $fileData = File::generate($request->file('letter_head'), 'companies/letter_head');
+
+                $filePathLetterHead = $insertLetterHead->storeAs($fileData['path'], $fileData['fileName'], 'public');
+                $company->letter_head = $filePathLetterHead;
+            } elseif ($request->remove_letter_head && $currentLetterHead && $currentLetterHead !== $defaultLetterHead) {
+                Storage::disk('public')->delete($currentLetterHead);
+                $company->letter_head = $defaultLetterHead;
+            }
+
+            $data['letter_head'] = $company->letter_head;
 
             $company->update($data);
 

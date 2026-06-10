@@ -26,6 +26,7 @@ class Company extends Model
         'address',
         'director_name',
         'director_signature',
+        'letter_head',
         'established_date'
     ];
 

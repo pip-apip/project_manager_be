@@ -21,6 +21,7 @@ class CompanyFactory extends Factory
             'address' => fake()->address(),
             'director_name' => fake()->name(),
             'director_signature' => null,
+            'letter_head' => null,
             'established_date' => fake()->dateTimeBetween('-1 month', '+1 month')->format('Y-m-d'),
         ];
     }

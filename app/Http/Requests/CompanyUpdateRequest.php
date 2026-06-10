@@ -30,6 +30,7 @@ class CompanyUpdateRequest extends FormRequest
             'address' => 'sometimes|required|string',
             'director_name' => 'sometimes|required|string|max:100',
             'director_signature' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
+            'letter_head' => 'sometimes|image|mimes:jpeg,png,jpg|max:2048',
             'established_date' => 'sometimes|required|date',
         ];
     }
@@ -52,6 +53,10 @@ class CompanyUpdateRequest extends FormRequest
             'director_signature.mimes' => 'Tanda tangan harus berformat jpeg, png, atau jpg.',
             'director_signature.max' => 'Ukuran tanda tangan maksimal 2MB.',
 
+            'letter_head.image' => 'Kop harus berupa gambar.',
+            'letter_head.mimes' => 'Kop harus berformat jpeg, png, atau jpg.',
+            'letter_head.max' => 'Ukuran kop maksimal 2MB.',
+
             'established_date.required' => 'Tanggal berdiri wajib diisi.',
             'established_date.date' => 'Tanggal berdiri harus berupa tanggal.',
         ];
@@ -71,6 +76,10 @@ class CompanyUpdateRequest extends FormRequest
 
         if ($this->has('director_name')) {
             $data['director_name'] = strip_tags($this->director_name);
+        }
+
+        if ($this->has('letter_head')) {
+            $data['letter_head'] = strip_tags($this->letter_head);
         }
 
         if ($this->has('established_date')) {
