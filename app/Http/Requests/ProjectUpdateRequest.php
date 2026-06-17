@@ -28,14 +28,14 @@ class ProjectUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string',
-            'code' => 'sometimes|required|string|max:10',
-            'contract_number' => 'sometimes|required|string|max:100',
-            'contract_date' => 'sometimes|required|date',
-            'client' => 'sometimes|required|string|max:100',
-            'ppk' => 'sometimes|required|string|max:100',
-            'support_teams' => 'sometimes|required|array',
-            'support_teams.*' => 'string',
+            'name' => 'sometimes|string',
+            'code' => 'sometimes|string|max:10',
+            'contract_number' => 'sometimes|string|max:100',
+            'contract_date' => 'sometimes|date',
+            'client' => 'sometimes|string|max:100',
+            'ppk' => 'sometimes|string|max:100',
+            'support_teams' => 'sometimes|array',
+            'support_teams.*' => 'sometimes|string',
             'value' => [
                 'sometimes', 'required',
                 function ($attribute, $value, $fail) {

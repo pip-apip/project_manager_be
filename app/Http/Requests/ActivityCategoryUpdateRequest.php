@@ -27,9 +27,9 @@ class ActivityCategoryUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|required|string|max:255',
-            'value' => 'sometimes|required|numeric',
-            'note' => 'sometimes|required|string',
+            'name' => 'sometimes|string|max:255',
+            'value' => 'sometimes|numeric',
+            'note' => 'sometimes|string',
             'images' => 'sometimes|array',
             'images.*' => 'file|mimes:jpg,jpeg,png|max:2048',
             'replace_images' => 'sometimes|array',
@@ -57,7 +57,7 @@ class ActivityCategoryUpdateRequest extends FormRequest
             'value.required' => 'Nilai wajib diisi.',
             'value.numeric' => 'Nilai harus berupa angka.',
 
-            'note.required' => 'Catatan wajib diisi.',
+            // 'note.required' => 'Catatan wajib diisi.',
             'note.string' => 'Catatan harus berupa teks.',
 
             'images.array' => 'Gambar harus berupa array.',
