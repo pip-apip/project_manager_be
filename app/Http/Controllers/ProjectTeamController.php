@@ -73,7 +73,10 @@ class ProjectTeamController extends Controller
     public function search(Request $request): JsonResponse
     {
         try {
-            $query = ProjectTeam::with(['project', 'user']);
+            $query = ProjectTeam::with(['project', 'user'])
+                    ->whereHas('project', function ($q) {
+                        $q->whereNull('deleted_at');
+                    });
 
             $relationList = [
                 'project_name' => ['relation' => 'project', 'column' => 'name'],
@@ -116,6 +119,7 @@ class ProjectTeamController extends Controller
                 ->join('tm_users', 'tr_project_teams.user_id', '=', 'tm_users.id')
                 ->orderBy('tm_users.name', 'asc')
                 ->select('tr_project_teams.*')
+                // ->whereNull('tr_project_teams.project_id')
                 ->paginate($request->query('limit', 10));
 
             if ($projectTeams->isEmpty()) {
