@@ -85,7 +85,7 @@ class ProjectController extends Controller
             $query = Project::with(['company', 'projectLeader', 'supportTeams.user']);
 
             $filters = $request->only([
-                'name', 'id', 'status', 'company_id', 'project_leader_id'
+                'name', 'id', 'status', 'company_id', 'project_leader_id', 'ppk'
             ]);
 
             foreach ($filters as $key => $value) {
@@ -113,6 +113,10 @@ class ProjectController extends Controller
                     case 'project_leader_id':
                         $leaderIds = is_array($value) ? $value : explode(',', $value);
                         $query->whereIn('project_leader_id', array_map('trim', $leaderIds));
+                        break;
+
+                    case 'ppk':
+                        $query->where('ppk', 'LIKE', "%{$value}%");
                         break;
                 }
             }
@@ -194,7 +198,7 @@ class ProjectController extends Controller
 
                     $total += ($qtyReceived * $qtyNominal);
                 }
-                
+
                 $progress = ($total / $projectValue) * 100;
 
                 $project->update([
