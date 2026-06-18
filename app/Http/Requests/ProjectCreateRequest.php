@@ -28,13 +28,13 @@ class ProjectCreateRequest extends FormRequest
         return [
             'name' => 'required|string',
             'code' => 'required|string|max:10',
-            'contract_number' => 'required|string|max:100',
-            'contract_date' => 'required|date',
-            'client' => 'required|string|max:100',
-            'ppk' => 'required|string|max:100',
-            'support_teams' => 'sometimes|array',
+            'contract_number' => 'nullable|string|max:100',
+            'contract_date' => 'nullable|date',
+            'client' => 'nullable|string|max:100',
+            'ppk' => 'nullable|string|max:100',
+            'support_teams' => 'nullable|array',
             'support_teams.*' => 'string',
-            'value' => 'required|numeric',
+            'value' => 'nullable|numeric',
             'company_id' => [
                 'required',
                 Rule::exists('tm_companies', 'id')->whereNull('deleted_at'),
@@ -43,9 +43,9 @@ class ProjectCreateRequest extends FormRequest
                 'required',
                 Rule::exists('tm_users', 'id')->whereNull('deleted_at'),
             ],
-            'start_date' => 'required|date|before_or_equal:end_date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'maintenance_date' => 'sometimes|date',
+            'start_date' => 'nullable|date|before_or_equal:end_date',
+            'end_date' => 'nullable|date|after_or_equal:start_date',
+            'maintenance_date' => 'nullable|date',
         ];
     }
 
@@ -102,21 +102,67 @@ class ProjectCreateRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        $this->merge([
-            'name' => strip_tags($this->name),
-            'code' => strip_tags($this->code),
-            'contract_number' => strip_tags($this->contract_number),
-            'contract_date' => strip_tags($this->contract_date),
-            'client' => strip_tags($this->client),
-            'ppk' => strip_tags($this->ppk),
-            'support_teams' => is_string($this->support_teams) ? json_decode($this->support_teams, true) : $this->support_teams,
-            'value' => strip_tags($this->value),
-            'company_id' => strip_tags($this->company_id),
-            'project_leader_id' => strip_tags($this->project_leader_id),
-            'start_date' => strip_tags($this->start_date),
-            'end_date' => strip_tags($this->end_date),
-            'maintenance_date' => strip_tags($this->maintenance_date),
-        ]);
+        $data = [];
+
+        if ($this->has('name')) {
+            $data['name'] = strip_tags($this->name);
+        }
+
+        if ($this->has('code')) {
+            $data['code'] = strip_tags($this->code);
+        }
+
+        if ($this->has('contract_number')) {
+            $data['contract_number'] = strip_tags($this->contract_number);
+        }
+
+        if ($this->has('contract_date')) {
+            $data['contract_date'] = strip_tags($this->contract_date);
+        }
+
+        if ($this->has('client')) {
+            $data['client'] = strip_tags($this->client);
+        }
+
+        if ($this->has('ppk')) {
+            $data['ppk'] = strip_tags($this->ppk);
+        }
+
+        if ($this->has('support_teams')) {
+            $data['support_teams'] = is_array($this->support_teams)
+            ? array_map('strip_tags', $this->support_teams)
+            : strip_tags($this->support_teams);
+        }
+
+        if ($this->has('value')) {
+            $data['value'] = strip_tags($this->value);
+        }
+
+        if ($this->has('status')) {
+            $data['status'] = strip_tags($this->status);
+        }
+
+        if ($this->has('company_id')) {
+            $data['company_id'] = strip_tags($this->company_id);
+        }
+
+        if ($this->has('project_leader_id')) {
+            $data['project_leader_id'] = strip_tags($this->project_leader_id);
+        }
+
+        if ($this->has('start_date')) {
+            $data['start_date'] = strip_tags($this->start_date);
+        }
+
+        if ($this->has('end_date')) {
+            $data['end_date'] = strip_tags($this->end_date);
+        }
+
+        if ($this->has('maintenance_date')) {
+            $data['maintenance_date'] = strip_tags($this->maintenance_date);
+        }
+
+        $this->merge($data);
     }
 
     protected function failedValidation(Validator $validator)
