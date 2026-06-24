@@ -27,7 +27,7 @@ class AdminDocRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:100',
+            'title' => 'required|string|max:250',
             'file' => 'sometimes|string',
             'project_id' => [
                 'required',

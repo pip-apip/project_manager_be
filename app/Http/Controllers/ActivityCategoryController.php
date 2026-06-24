@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ActivityCategoryImport;
+use Maatwebsite\Excel\Facades\Excel;
+
 use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\ActivityCategoryCreateRequest;
@@ -16,6 +19,13 @@ use function PHPUnit\Framework\isNull;
 
 class ActivityCategoryController extends Controller
 {
+    public function import()
+    {
+        Excel::import(new ActivityCategoryImport, 'users.xlsx');
+
+        return redirect('/')->with('success', 'All good!');
+    }
+
     public function create(ActivityCategoryCreateRequest $request): JsonResponse
     {
         try {
@@ -129,8 +139,16 @@ class ActivityCategoryController extends Controller
                 }
             }
 
-            $activityCategories = $query->orderBy('name', 'asc')
-                ->paginate($request->query('limit', 10));
+            if ($request->has('order_by') && $request->has('order')) {
+                $orderBy = $request->query('order_by');
+                $order = $request->query('order');
+
+                $query->orderBy($orderBy, $order);
+            } else {
+                $query->orderBy('name', 'asc');
+            }
+
+            $activityCategories = $query->paginate($request->query('limit', 10));
 
             if ($activityCategories->isEmpty()) {
                 return Response::handler(
