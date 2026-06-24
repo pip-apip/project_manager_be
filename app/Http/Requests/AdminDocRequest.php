@@ -27,7 +27,7 @@ class AdminDocRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string|max:250',
+            'title' => 'required|string',
             'file' => 'sometimes|string',
             'project_id' => [
                 'required',
@@ -45,7 +45,7 @@ class AdminDocRequest extends FormRequest
         return [
             'title.required' => 'Judul wajib diisi.',
             'title.string' => 'Judul harus berupa teks.',
-            'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
+            // 'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
 
             'file.string' => 'File harus berupa teks.',
 
