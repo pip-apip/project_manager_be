@@ -87,7 +87,7 @@ class TimelinesController extends Controller
                 $query->where('user_id', $request->query('user_id'));
             }
 
-            $timelines = $query->get();
+            $timelines = $query->paginate($request->query('limit', 100));
 
             if ($timelines->isEmpty()) {
                 return Response::handler(
