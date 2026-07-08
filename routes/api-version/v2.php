@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityCategoryController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\ActivityDocController;
 use App\Http\Controllers\ActivityTeamController;
 use App\Http\Controllers\AdminDocCategoryController;
@@ -10,8 +10,11 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CharteredAccountantController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MailStoneSpektekController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectTeamController;
+use App\Http\Controllers\SpektekController;
+use App\Http\Controllers\SubSpektekController;
 use App\Http\Controllers\TimelinesController;
 use App\Http\Controllers\UploadChunkController;
 use App\Http\Controllers\UserController;
@@ -119,6 +122,32 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::get('/timelines/{id}', [TimelinesController::class, 'getById']);
     Route::patch('/timelines/{id}', [TimelinesController::class, 'update']);
     Route::delete('/timelines/{id}', [TimelinesController::class, 'softDelete']);
+
+    // MailStone Spektek
+    // Route::post('/mailstone-spekteks', [MailStoneSpektekController::class, 'create']);
+    // Route::get('/mailstone-spekteks', [MailStoneSpektekController::class, 'getAll']);
+    // Route::get('/mailstone-spekteks/search', [MailStoneSpektekController::class, 'search']);
+    // // Route::get('/mailstone-spekteks/{id}', [MailStoneSpektekController::class, 'getById']);
+    // Route::post('/mailstone-spektek/bulkCreate', [MailStoneSpektekController::class, 'bulkCreate']);
+    // Route::patch('/mailstone-spekteks/{id}', [MailStoneSpektekController::class, 'update']);
+    // Route::delete('/mailstone-spekteks/{id}', [MailStoneSpektekController::class, 'softDelete']);
+
+    // Spektek
+    Route::post('/spekteks', [SpektekController::class, 'create']);
+    Route::post('/spekteks/bulkCreate', [SpektekController::class, 'bulkCreate']);
+    Route::get('/spekteks', [SpektekController::class, 'getAll']);
+    Route::get('/spekteks/search', [SpektekController::class, 'search']);
+    Route::get('/spekteks/{id}', [SpektekController::class, 'getById']);
+    Route::patch('/spekteks/{id}', [SpektekController::class, 'update']);
+    Route::patch('/spekteks/{id}/updateQtyReceived', [SpektekController::class, 'updateQtyReceived']);
+    Route::patch('/spekteks/{id}/updateProgressPercentage', [SpektekController::class, 'updateProgressPercentage']);
+    Route::delete('/spekteks/{id}', [SpektekController::class, 'softDelete']);
+
+    // Sub Spektek
+    // Route::post('/sub-spekteks', [SubSpektekController::class, 'create']);
+    // Route::get('/sub-spekteks', [SubSpektekController::class, 'getAll']);
+    // Route::patch('/sub-spekteks/{id}', [SubSpektekController::class, 'update']);
+    // Route::delete('/sub-spekteks/{id}', [SubSpektekController::class, 'softDelete']);
 
     // Chartered Accountant
     Route::post('/chartered-accountants', [CharteredAccountantController::class, 'create']);
