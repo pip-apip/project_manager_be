@@ -149,6 +149,68 @@ class SubSpektekController extends Controller
         }
     }
 
+    public function updateQtyReceived($id, SubSpektekUpdateRequest $request): JsonResponse
+    {
+        try {
+            $subSpektek = SubSpektek::findOrFail($id);
+
+            $subSpektek->update([
+                'qty_received' => $request->qty_received,
+                'qty_updated_at' => now()
+            ]);
+
+            return Response::handler(
+                200,
+                'Jumlah diterima berhasil diperbarui',
+                SubSpektekResource::make($subSpektek)
+            );
+        } catch (ModelNotFoundException $e) {
+            return Response::handler(
+                404,
+                'Sub Spektek tidak ditemukan'
+            );
+        } catch (\Exception $e) {
+            return Response::handler(
+                500,
+                'Gagal memperbarui jumlah diterima',
+                [],
+                [],
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function updateProgressPercentage($id, SubSpektekUpdateRequest $request): JsonResponse
+    {
+        try {
+            $subSpektek = SubSpektek::findOrFail($id);
+
+            $subSpektek->update([
+                'progress_percentage' => $request->progress_percentage,
+                'progress_updated_at' => now()
+            ]);
+
+            return Response::handler(
+                200,
+                'Persentase kemajuan berhasil diperbarui',
+                SubSpektekResource::make($subSpektek)
+            );
+        } catch (ModelNotFoundException $e) {
+            return Response::handler(
+                404,
+                'Sub Spektek tidak ditemukan'
+            );
+        } catch (\Exception $e) {
+            return Response::handler(
+                500,
+                'Gagal memperbarui persentase kemajuan',
+                [],
+                [],
+                $e->getMessage()
+            );
+        }
+    }
+
     public function softDelete($id): JsonResponse
     {
         try {
