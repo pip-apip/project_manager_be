@@ -29,7 +29,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
 
     // Users
-    Route::get('/users', [UserController::class, 'getAll'])->middleware('role:SUPERADMIN,ADMIN,USER');
+    // Route::get('/users', [UserController::class, 'getAll'])->middleware('role:SUPERADMIN,ADMIN,USER');
+    Route::get('/users', [UserController::class, 'getAll']);
     Route::get('/users/search', [UserController::class, 'search']);
     Route::get('/users/{id}', [UserController::class, 'getById']);
     Route::patch('/users/{id}', [UserController::class, 'update']);
@@ -85,6 +86,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::get('/admin-docs/search', [AdminDocController::class, 'search']);
     Route::get('/admin-docs/{id}', [AdminDocController::class, 'getById']);
     Route::delete('/admin-docs/{id}', [AdminDocController::class, 'softDelete']);
+    Route::get('/docs/move', [AdminDocController::class, 'movePath']);
 
     // Activity Category
     Route::post('/activity-categories', [ActivityCategoryController::class, 'create']);
@@ -144,10 +146,10 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::delete('/spekteks/{id}', [SpektekController::class, 'softDelete']);
 
     // Sub Spektek
-    // Route::post('/sub-spekteks', [SubSpektekController::class, 'create']);
-    // Route::get('/sub-spekteks', [SubSpektekController::class, 'getAll']);
+    Route::post('/sub-spekteks', [SubSpektekController::class, 'create']);
+    Route::get('/sub-spekteks', [SubSpektekController::class, 'getAll']);
     // Route::patch('/sub-spekteks/{id}', [SubSpektekController::class, 'update']);
-    // Route::delete('/sub-spekteks/{id}', [SubSpektekController::class, 'softDelete']);
+    Route::delete('/sub-spekteks/{id}', [SubSpektekController::class, 'softDelete']);
 
     // Chartered Accountant
     Route::post('/chartered-accountants', [CharteredAccountantController::class, 'create']);
