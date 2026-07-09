@@ -20,11 +20,11 @@ class SpektekObserver
      */
     public function updated(ActivityCategory $activityCategory): void
     {
-        $project = Project::with('company', 'projectLeader')->find($activityCategory->project_id);
+        // $project = Project::with('company', 'projectLeader')->find($activityCategory->project_id);
 
-        $project->update([
-            'progress' => $project->activityCategories()->avg('value')
-        ]);
+        // $project->update([
+        //     'progress' => $project->activityCategories()->avg('value')
+        // ]);
     }
 
     /**
