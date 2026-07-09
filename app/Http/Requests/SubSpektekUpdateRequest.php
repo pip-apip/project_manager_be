@@ -22,7 +22,7 @@ class SubSpektekUpdateRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    protected function rules(): array
+    public function rules(): array
     {
         return [
             'name' => 'sometimes|required|string|max:255',
@@ -38,7 +38,7 @@ class SubSpektekUpdateRequest extends FormRequest
         ];
     }
 
-    protected function messages(): array
+    public function messages(): array
     {
         return [
             'name.required' => 'Nama sub spektek harus diisi',
@@ -58,7 +58,7 @@ class SubSpektekUpdateRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation(): void
+    public function prepareForValidation(): void
     {
         $data = [];
 
@@ -95,7 +95,7 @@ class SubSpektekUpdateRequest extends FormRequest
         $this->merge($data);
     }
 
-    protected function failedValidation(Validator $validator): void
+    public function failedValidation(Validator $validator): void
     {
         throw new ValidationException($validator, Response::handler(
             400,
