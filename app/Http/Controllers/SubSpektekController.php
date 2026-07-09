@@ -158,7 +158,6 @@ class SubSpektekController extends Controller
             return Response::handler(
                 200,
                 'Sub Spektek berhasil dihapus',
-                SubSpektekResource::make($subSpektek)
             );
         } catch (ModelNotFoundException $e) {
             return Response::handler(
