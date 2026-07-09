@@ -23,7 +23,7 @@ class SpektekResource extends JsonResource
             'qty_nominal' => (int) $this->qty_nominal ?? 0,
             'qty_received' => (int) $this->qty_received ?? 0,
             'qty_updated_at' => $this->qty_updated_at ?? null,
-            'progress_percentage' => $this->progress_percentage ?? 0,
+            'progress_percentage' => (float) $this->progress_percentage ?? 0,
             'progress_updated_at' => $this->progress_updated_at ?? null,
             'detail' => $this->detail ?? null,
             'note' => $this->note ?? null,
