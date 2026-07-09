@@ -69,20 +69,20 @@ class Spektek extends Model
         return $this->hasMany(SubSpektek::class, 'spektek_id', 'id');
     }
 
-    protected function arrivalPercentage(): Attribute
-    {
-        return Attribute::make(
-            get: function () {
+    // protected function arrivalPercentage(): Attribute
+    // {
+    //     return Attribute::make(
+    //         get: function () {
 
-                if ($this->qty_total == 0) {
-                    return 0;
-                }
+    //             if ($this->qty_total == 0) {
+    //                 return 0;
+    //             }
 
-                return round(
-                    ($this->qty_received / $this->qty_total) * 100,
-                    2
-                );
-            }
-        );
-    }
+    //             return round(
+    //                 ($this->qty_received / $this->qty_total) * 100,
+    //                 2
+    //             );
+    //         }
+    //     );
+    // }
 }
