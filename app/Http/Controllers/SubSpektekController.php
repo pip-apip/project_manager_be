@@ -6,7 +6,6 @@ use App\Helpers\Response;
 use App\Http\Requests\SubSpektekCreateRequest;
 use App\Http\Requests\SubSpektekUpdateRequest;
 use App\Http\Resources\SubSpektekResource;
-use App\Models\Spektek;
 use App\Models\SubSpektek;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
