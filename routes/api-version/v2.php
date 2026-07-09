@@ -148,7 +148,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     // Sub Spektek
     Route::post('/sub-spekteks', [SubSpektekController::class, 'create']);
     Route::get('/sub-spekteks', [SubSpektekController::class, 'getAll']);
-    // Route::patch('/sub-spekteks/{id}', [SubSpektekController::class, 'update']);
+    Route::patch('/sub-spekteks/{id}', [SubSpektekController::class, 'update']);
     Route::delete('/sub-spekteks/{id}', [SubSpektekController::class, 'softDelete']);
 
     // Chartered Accountant
