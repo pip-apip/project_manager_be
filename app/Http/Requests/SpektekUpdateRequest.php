@@ -77,8 +77,8 @@ class SpektekUpdateRequest extends FormRequest
         if ($this->has('total_nominal')) {
             $data['total_nominal'] = $this->input('total_nominal');
         }
-        if ($this->has('percentage')) {
-            $data['percentage'] = $this->input('percentage');
+        if ($this->has('progress_percentage')) {
+            $data['progress_percentage'] = $this->input('progress_percentage');
         }
         if ($this->has('qty_recived')) {
             $data['qty_recived'] = $this->input('qty_recived');
