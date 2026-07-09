@@ -226,6 +226,23 @@ class SpektekController extends Controller
                 );
             }
 
+            if($request->has('name')) {
+                $nameValidate = Spektek::where('name', $request->name)
+                    ->where('project_id', $request->project_id ?? $spektek->project_id)
+                    ->where('id', '!=', $id)
+                    ->exists();
+
+                if ($nameValidate) {
+                    return Response::handler(
+                        400,
+                        'Gagal mengupdate spektek',
+                        [],
+                        [],
+                        ['name' => ['Nama spektek sudah ada.']]
+                    );
+                }
+            }
+
             $request->only([
                 'name',
                 'type',
