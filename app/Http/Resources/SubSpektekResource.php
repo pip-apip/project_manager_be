@@ -19,7 +19,7 @@ class SubSpektekResource extends JsonResource
             'name' => $this->name,
             'type' => $this->type,
             'qty_total' => (int) $this->qty_total ?? 0,
-            'qty_recived' => (int) $this->qty_recived ?? 0,
+            'qty_received' => (int) $this->qty_received ?? 0,
             'total_nominal' => (int) $this->total_nominal ?? 0,
             'qty_nominal' => (int) $this->qty_nominal ?? 0,
             'progress_percentage' => (float) $this->progress_percentage ?? 0,

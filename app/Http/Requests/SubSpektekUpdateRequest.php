@@ -28,7 +28,7 @@ class SubSpektekUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:255',
             'type' => 'sometimes|required|in:hardware,software',
             'qty_total' => 'sometimes|required|integer|min:0',
-            'qty_recived' => 'sometimes|nullable|integer|min:0',
+            'qty_received' => 'sometimes|nullable|integer|min:0',
             'qty_nominal' => 'sometimes|nullable|integer|min:0',
             'total_nominal' => 'sometimes|required|integer|min:0',
             'progress_percentage' => 'sometimes|nullable|numeric|min:0|max:100',
@@ -43,8 +43,8 @@ class SubSpektekUpdateRequest extends FormRequest
         return [
             'name.required' => 'Nama sub spektek harus diisi',
 
-            'qty_recived.integer' => 'Jumlah diterima harus berupa angka',
-            'qty_recived.min' => 'Jumlah diterima tidak boleh kurang dari 0',
+            'qty_received.integer' => 'Jumlah diterima harus berupa angka',
+            'qty_received.min' => 'Jumlah diterima tidak boleh kurang dari 0',
 
             'qty_total.required' => 'Jumlah total harus diisi',
             'qty_total.integer' => 'Jumlah total harus berupa angka',
@@ -71,8 +71,8 @@ class SubSpektekUpdateRequest extends FormRequest
         if ($this->filled('qty_total')) {
             $data['qty_total'] = strip_tags($this->qty_total);
         }
-        if ($this->filled('qty_recived')) {
-            $data['qty_recived'] = strip_tags($this->qty_recived);
+        if ($this->filled('qty_received')) {
+            $data['qty_received'] = strip_tags($this->qty_received);
         }
         if ($this->filled('qty_nominal')) {
             $data['qty_nominal'] = strip_tags($this->qty_nominal);
