@@ -6,9 +6,11 @@ use App\Helpers\Response;
 use App\Http\Requests\SubSpektekCreateRequest;
 use App\Http\Requests\SubSpektekUpdateRequest;
 use App\Http\Resources\SubSpektekResource;
+use App\Models\Spektek;
 use App\Models\SubSpektek;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 
 
@@ -65,6 +67,35 @@ class SubSpektekController extends Controller
             return Response::handler(
                 200,
                 'Berhasil mengambil data sub spektek',
+                SubSpektekResource::collection($subSpekteks)
+            );
+        } catch (\Exception $e) {
+            return Response::handler(
+                500,
+                'Gagal mengambil data sub spektek',
+                [],
+                [],
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        try {
+            $query = SubSpektek::query();
+
+            foreach ($request->all() as $key => $value) {
+                if (in_array($key, ['id','name', 'type', 'spektek_id'])) {
+                    $query->where($key, 'LIKE', "%{$value}%");
+                }
+            }
+
+            $subSpekteks = $query->with('spektek')->get();
+
+            return Response::handler(
+                200,
+                'Berhasil mencari sub spektek',
                 SubSpektekResource::collection($subSpekteks)
             );
         } catch (\Exception $e) {
