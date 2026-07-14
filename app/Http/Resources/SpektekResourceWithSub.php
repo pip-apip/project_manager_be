@@ -18,6 +18,13 @@ class SpektekResourceWithSub extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'type' => $this->type,
+            'qty_total' => (int) $sub->qty_total ?? 0,
+            'qty_recived' => (int) $sub->qty_recived ?? 0,
+            'total_nominal' => (int) $sub->total_nominal ?? 0,
+            'qty_nominal' => (int) $sub->qty_nominal ?? 0,
+            'progress_percentage' => $sub->arrivalPercentage,
+            'detail' => $sub->detail ?? null,
+            'note' => $sub->note ?? null,
             'project_id' => $this->project->id ?? 0,
             'project_name' => $this->project->name ?? null,
             'sub_spekteks' => $this->subSpekteks->map(function ($sub) {
