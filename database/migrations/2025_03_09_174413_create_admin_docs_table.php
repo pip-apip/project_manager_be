@@ -23,6 +23,7 @@ return new class extends Migration
                 ->nullable(false)
                 ->constrained('tm_admin_doc_categories')
                 ->onDelete('cascade');
+            $table->string('keyword', 255)->nullable();
             $table->timestamp('created_at')->useCurrent();
             $table->softDeletes();
         });
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('admin_docs');
+        Schema::dropIfExists('tp_2_admin_docs');
     }
 };

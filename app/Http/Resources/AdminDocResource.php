@@ -36,6 +36,7 @@ class AdminDocResource extends JsonResource
                 'url' => $file,
                 'size' => $size,
             ],
+            'keyword' => $this->keyword,
             'project_id' => optional($this->project)->id,
             'project_name' => optional($this->project)->name,
             'admin_doc_category_id' => optional($this->adminDocCategory)->id,

@@ -5,11 +5,10 @@ namespace App\Http\Requests;
 use App\Helpers\Response;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\ValidationException;
 
-class AdminDocRequest extends FormRequest
+class AdminDocUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,14 +26,14 @@ class AdminDocRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|string',
+            'title' => 'sometimes|string',
             'file' => 'sometimes|string',
             'project_id' => [
-                'required',
+                'sometimes',
                 Rule::exists('tp_1_projects', 'id')->whereNull('deleted_at'),
             ],
             'admin_doc_category_id' => [
-                'required',
+                'sometimes',
                 Rule::exists('tm_admin_doc_categories', 'id')->whereNull('deleted_at'),
             ],
             'keyword' => 'sometimes|array',
@@ -45,16 +44,12 @@ class AdminDocRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'title.required' => 'Judul wajib diisi.',
             'title.string' => 'Judul harus berupa teks.',
-            // 'title.max' => 'Judul tidak boleh lebih dari 100 karakter.',
 
             'file.string' => 'File harus berupa teks.',
 
-            'project_id.required' => 'Project wajib dipilih.',
             'project_id.exists' => 'Project tidak ditemukan.',
 
-            'admin_doc_category_id.required' => 'Kategori wajib dipilih.',
             'admin_doc_category_id.exists' => 'Kategori tidak ditemukan.',
 
             'keyword.array' => 'Keyword harus berupa array.',
@@ -62,14 +57,31 @@ class AdminDocRequest extends FormRequest
         ];
     }
 
-    protected function prepareForValidation()
+    public function prepareForValidation(): void
     {
-        $this->merge([
-            'title' => strip_tags($this->title),
-            'project_id' => strip_tags($this->project_id),
-            'admin_doc_category_id' => strip_tags($this->admin_doc_category_id),
-            'keyword' => $this->keyword,
-        ]);
+        $data = [];
+
+        if ($this->has('title')) {
+            $data['title'] = strip_tags($this->title);
+        }
+
+        if ($this->has('file')) {
+            $data['file'] = strip_tags($this->file);
+        }
+
+        if ($this->has('project_id')) {
+            $data['project_id'] = strip_tags($this->project_id);
+        }
+
+        if ($this->has('admin_doc_category_id')) {
+            $data['admin_doc_category_id'] = strip_tags($this->admin_doc_category_id);
+        }
+
+        if ($this->has('keyword')) {
+            $data['keyword'] = $this->keyword;
+        }
+
+        $this->merge($data);
     }
 
     protected function failedValidation(Validator $validator)

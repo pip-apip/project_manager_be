@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 // use App\Helpers\File;
 use App\Helpers\Response;
 use App\Http\Requests\AdminDocRequest;
+use App\Http\Requests\AdminDocUpdateRequest;
 use App\Http\Resources\AdminDocResource;
 use App\Models\AdminDoc;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminDocController extends Controller
 {
@@ -31,7 +33,8 @@ class AdminDocController extends Controller
                 'title' => $request->title,
                 'file' => $request->file,
                 'project_id' => $request->project_id,
-                'admin_doc_category_id' => $request->admin_doc_category_id
+                'admin_doc_category_id' => $request->admin_doc_category_id,
+                'keyword' => $request->keyword,
             ]);
 
             $adminDoc->load('project.company', 'adminDocCategory')->refresh();
@@ -45,6 +48,47 @@ class AdminDocController extends Controller
             return Response::handler(
                 500,
                 'Gagal membuat dokumen administrasi',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
+
+    public function update(AdminDocUpdateRequest $request, $id): JsonResponse
+    {
+        try {
+            $adminDoc = AdminDoc::find($id);
+
+            if (!$adminDoc) {
+                return Response::handler(
+                    400,
+                    'Gagal memperbarui dokumen administrasi',
+                    [],
+                    [],
+                    'Data dokumen administrasi tidak ditemukan.'
+                );
+            }
+
+            $data = $request->only([
+                'title',
+                'file',
+                'project_id',
+                'admin_doc_category_id',
+                'keyword'
+            ]);
+
+            $adminDoc->update($data);
+
+            return Response::handler(
+                200,
+                'Berhasil memperbarui dokumen administrasi',
+                AdminDocResource::make($adminDoc)
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Gagal memperbarui dokumen administrasi',
                 [],
                 [],
                 $err->getMessage()

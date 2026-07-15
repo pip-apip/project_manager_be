@@ -85,8 +85,8 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::get('/admin-docs', [AdminDocController::class, 'getAll']);
     Route::get('/admin-docs/search', [AdminDocController::class, 'search']);
     Route::get('/admin-docs/{id}', [AdminDocController::class, 'getById']);
+    Route::patch('/admin-docs/{id}', [AdminDocController::class, 'update']);
     Route::delete('/admin-docs/{id}', [AdminDocController::class, 'softDelete']);
-    Route::get('/docs/move', [AdminDocController::class, 'movePath']);
 
     // Activity Category
     Route::post('/activity-categories', [ActivityCategoryController::class, 'create']);

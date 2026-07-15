@@ -23,6 +23,11 @@ class AdminDoc extends Model
         'date',
         'project_id',
         'admin_doc_category_id',
+        'keyword',
+    ];
+
+    protected $casts = [
+        'keyword' => 'array',
     ];
 
     protected $hidden = [
