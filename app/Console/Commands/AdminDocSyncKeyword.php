@@ -68,28 +68,57 @@ class AdminDocSyncKeyword extends Command
         }else{
             $this->info("Syncing admin document keywords with their respective category keywords");
 
-            // Test update only first data
-            $firstData = $data[0];
+            $updated = 0;
+            $failed = [];
 
-            $adminDoc = AdminDoc::where('id', $firstData['id'])->first();
-            $this->info($adminDoc);
+            foreach ($data as $item) {
+                $adminDoc = AdminDoc::find($item['id']);
 
-            if ($adminDoc) {
-                $keyword = $adminDoc->keyword ?? [];
+                if (!$adminDoc) {
+                    $failed[] = [
+                        'id' => $item['id'],
+                        'reason' => 'Admin Doc not found',
+                    ];
 
-                // update index 0
-                $keyword[0] = $firstData['keyword'][0];
+                    continue;
+                }
 
-                $adminDoc->update([
-                    'keyword' => $keyword,
-                ]);
+                try {
+                    $keyword = $adminDoc->keyword ?? [];
 
-                $this->info(
-                    "Updated Admin Doc ID: {$adminDoc->id}, Keyword: {$keyword[0]}"
-                );
-                $this->info($adminDoc);
-            } else {
-                $this->error("Admin Doc not found");
+                    // update index 0
+                    $keyword[0] = $item['keyword'][0];
+
+                    $adminDoc->update([
+                        'keyword' => $keyword,
+                    ]);
+
+                    $updated++;
+
+                    $this->info(
+                        "Updated Admin Doc ID: {$adminDoc->id}, Keyword: {$keyword[0]}"
+                    );
+
+                } catch (\Exception $e) {
+                    $failed[] = [
+                        'id' => $item['id'],
+                        'reason' => $e->getMessage(),
+                    ];
+                }
+            }
+
+            $this->info("Finished syncing admin document keywords");
+            $this->info("Total updated: {$updated}");
+            $this->info("Total failed: " . count($failed));
+
+            if (count($failed) > 0) {
+                $this->error("Failed list:");
+
+                foreach ($failed as $error) {
+                    $this->error(
+                        "ID: {$error['id']} - {$error['reason']}"
+                    );
+                }
             }
         }
     }
