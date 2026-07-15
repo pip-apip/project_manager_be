@@ -31,29 +31,32 @@ class CompanyController extends Controller
                 );
             }
 
-            $filePath = 'companies/default.png';
-            $filePathLetterHead = 'companies/letter_head/default.png';
-
-            if ($request->hasFile('director_signature')) {
-                $fileData = File::generate($request->file('director_signature'), 'companies');
-
-                $filePath = $request->file('director_signature')->storeAs($fileData['path'], $fileData['fileName'], 'public');
-            }
-
-            if ($request->hasFile('letter_head')) {
-                $fileData = File::generate($request->file('letter_head'), 'companies/letter_head');
-
-                $filePathLetterHead = $request->file('letter_head')->storeAs($fileData['path'], $fileData['fileName'], 'public');
-            }
-
             $company = Company::create([
                 'name' => $request->name,
                 'address' => $request->address,
                 'director_name' => $request->director_name,
-                'director_signature' => $filePath,
-                'letter_head' => $filePathLetterHead,
                 'established_date' => $request->established_date
             ]);
+
+            $directorSignaturePath = "companies_docs/{$company->id}/director_signature/default.png";
+            if ($request->hasFile('director_signature')) {
+                $fileData = File::generate($request->file('director_signature'), "companies_docs/{$company->id}/director_signature");
+                $directorSignaturePath = $request->file('director_signature')->storeAs($fileData['path'], $fileData['fileName'], 's3');
+            }
+
+            $letterHeadPath = "companies_docs/{$company->id}/letter_head/default.png";
+            if ($request->hasFile('letter_head')) {
+                $fileData = File::generate($request->file('letter_head'), "companies_docs/{$company->id}/letter_head");
+                $letterHeadPath = $request->file('letter_head')->storeAs($fileData['path'], $fileData['fileName'], 's3');
+            }
+
+            $company->update([
+                'director_signature' => $directorSignaturePath,
+                'letter_head' => $letterHeadPath,
+            ]);
+
+            // Refresh the model to get the updated attributes
+            $company->refresh();
 
             return Response::handler(
                 201,
@@ -219,33 +222,33 @@ class CompanyController extends Controller
                     Storage::disk('public')->delete($currentImage);
                 }
 
-                $fileData = File::generate($request->file('director_signature'), 'companies');
+                $fileData = File::generate($request->file('director_signature'), 'companies_docs');
 
-                $filePath = $insertImage->storeAs($fileData['path'], $fileData['fileName'], 'public');
+                $filePath = $insertImage->storeAs($fileData['path'], $fileData['fileName'], 's3');
                 $company->director_signature = $filePath;
             } elseif ($request->remove_image && $currentImage && $currentImage !== $defaultImage) {
-                Storage::disk('public')->delete($currentImage);
+                Storage::disk('s3')->delete($currentImage);
                 $company->director_signature = $defaultImage;
             }
 
             $data['director_signature'] = $company->director_signature;
 
             $currentLetterHead = $company->letter_head ?? null;
-            $defaultLetterHead = 'companies/letter_head/default.png';
+            $defaultLetterHead = "companies_docs/{$company->id}/letter_head/default.png";
 
             if ($request->hasFile('letter_head')) {
                 $insertLetterHead = $request->file('letter_head') ?? null;
 
                 if ($currentLetterHead && $currentLetterHead !== $defaultLetterHead) {
-                    Storage::disk('public')->delete($currentLetterHead);
+                    Storage::disk('s3')->delete($currentLetterHead);
                 }
 
-                $fileData = File::generate($request->file('letter_head'), 'companies/letter_head');
+                $fileData = File::generate($request->file('letter_head'), "companies_docs/{$company->id}/letter_head");
 
-                $filePathLetterHead = $insertLetterHead->storeAs($fileData['path'], $fileData['fileName'], 'public');
+                $filePathLetterHead = $insertLetterHead->storeAs($fileData['path'], $fileData['fileName'], 's3');
                 $company->letter_head = $filePathLetterHead;
             } elseif ($request->remove_letter_head && $currentLetterHead && $currentLetterHead !== $defaultLetterHead) {
-                Storage::disk('public')->delete($currentLetterHead);
+                Storage::disk('s3')->delete($currentLetterHead);
                 $company->letter_head = $defaultLetterHead;
             }
 

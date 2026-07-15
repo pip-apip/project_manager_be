@@ -22,9 +22,9 @@ class File
         $path = "{$directory}/{$year}/{$month}";
 
         return [
-            'path' => $path,
+            'path' => $directory,
             'fileName' => $fileName,
-            'fullPath' => "{$path}/{$fileName}"
+            'fullPath' => "{$directory}/{$fileName}"
         ];
     }
 
