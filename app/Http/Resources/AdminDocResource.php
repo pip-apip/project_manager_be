@@ -15,7 +15,8 @@ class AdminDocResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $file = rawurlencode($this->file) ? '/storage/' . rawurlencode($this->file) : '';
+        // $file = rawurlencode($this->file) ? '/storage/' . rawurlencode($this->file) : '';
+        $file = rawurlencode($this->file) ? rawurlencode($this->file) : '';
         $path = $this->file;
 
         $sizeBytes = $path && Storage::disk('public')->exists($path)
