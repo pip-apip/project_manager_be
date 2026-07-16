@@ -20,9 +20,9 @@ class CompanyResource extends JsonResource
             'address' => $this->address,
             'director_name' => $this->director_name,
             // 'director_signature' => $this->director_signature ? '/storage/workspace'.$this->director_signature : '',
-            'director_signature' => $this->director_signature ? $this->director_signature : null,
+            'director_signature' => $this->director_signature ? rawurldecode($this->director_signature) : null,
             // 'letter_head' => $this->letter_head ? '/storage/workspace'.$this->letter_head : null,
-            'letter_head' => $this->letter_head ? $this->letter_head : null,
+            'letter_head' => $this->letter_head ? rawurldecode($this->letter_head) : null,
             'established_date' => $this->established_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at
