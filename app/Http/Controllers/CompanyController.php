@@ -303,4 +303,59 @@ class CompanyController extends Controller
             );
         }
     }
+
+    public function hardDelete($id): JsonResponse
+    {
+        try {
+            $company = Company::withTrashed()->find($id);
+
+            if (!$company) {
+                return Response::handler(
+                    400,
+                    'Gagal menghapus data perusahaan',
+                    [],
+                    [],
+                    'Data perusahaan tidak ditemukan.'
+                );
+            }
+
+            $findRelation = $company->projects()->exists();
+
+            if ($findRelation) {
+                return Response::handler(
+                    400,
+                    'Gagal menghapus data perusahaan',
+                    [],
+                    [],
+                    'Data perusahaan masih memiliki hubungan dengan data lain.'
+                );
+            }
+
+            $filesToDelete = [
+                $company->director_signature,
+                $company->letter_head
+            ];
+
+            foreach ($filesToDelete as $file) {
+                if ($file) {
+                    Storage::disk('s3')->delete($file);
+                }
+            }
+
+            $company->forceDelete();
+
+            return Response::handler(
+                200,
+                'Berhasil menghapus data perusahaan'
+            );
+        } catch (\Exception $err) {
+            return Response::handler(
+                500,
+                'Gagal menghapus data perusahaan',
+                [],
+                [],
+                $err->getMessage()
+            );
+        }
+    }
 }

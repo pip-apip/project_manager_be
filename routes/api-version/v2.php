@@ -46,6 +46,7 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::get('/companies/{id}', [CompanyController::class, 'getById']);
     Route::post('/companies/{id}', [CompanyController::class, 'update']);
     Route::delete('/companies/{id}', [CompanyController::class, 'softDelete']);
+    Route::delete('/companies/hard/{id}', [CompanyController::class, 'hardDelete']);
 
     // Projects
     Route::post('/projects', [ProjectController::class, 'create']);
