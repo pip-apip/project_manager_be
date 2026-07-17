@@ -70,6 +70,18 @@ class AdminDocController extends Controller
                 );
             }
 
+            $fileValidate = AdminDoc::where('file', $request->file)->where('id', '!=', $id)->exists();
+
+            if ($fileValidate) {
+                return Response::handler(
+                    400,
+                    'Gagal memperbarui dokumen administrasi',
+                    [],
+                    [],
+                    ['file' => ['File dokumen administrasi sudah ada.']]
+                );
+            }
+
             $data = $request->only([
                 'title',
                 'file',
