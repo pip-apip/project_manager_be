@@ -17,7 +17,7 @@ class AdminDocController extends Controller
     public function create(AdminDocRequest $request): JsonResponse
     {
         try {
-            $adminDoc = AdminDoc::where('title', $request->title)->where('project_id', $request->project_id)->exists();
+            $adminDoc = AdminDoc::where('file', $request->file)->where('project_id', $request->project_id)->exists();
 
             if ($adminDoc) {
                 return Response::handler(
@@ -25,7 +25,7 @@ class AdminDocController extends Controller
                     'Gagal membuat dokumen administrasi',
                     [],
                     [],
-                    ['title' => ['Judul dokumen administrasi sudah ada.']]
+                    ['file' => ['File dokumen administrasi sudah ada.']]
                 );
             }
 
