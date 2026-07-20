@@ -93,6 +93,11 @@ class Project extends Model
         return $this->hasMany(CharteredAccountant::class, 'project_id', 'id');
     }
 
+    public function spekteks(): HasMany
+    {
+        return $this->hasMany(Spektek::class, 'project_id', 'id');
+    }
+
     public function supportTeams()
     {
         return $this->hasMany(ProjectTeam::class, 'project_id')
