@@ -142,9 +142,11 @@ Route::post('/auth/login', [AuthController::class, 'login']);
     Route::get('/spekteks/search', [SpektekController::class, 'search']);
     Route::get('/spekteks/{id}', [SpektekController::class, 'getById']);
     Route::patch('/spekteks/{id}', [SpektekController::class, 'update']);
+    Route::patch('/updateBulk/spekteks', [SpektekController::class, 'bulkUpdate']);
     Route::patch('/spekteks/{id}/updateQtyReceived', [SpektekController::class, 'updateQtyReceived']);
     Route::patch('/spekteks/{id}/updateProgressPercentage', [SpektekController::class, 'updateProgressPercentage']);
     Route::delete('/spekteks/{id}', [SpektekController::class, 'softDelete']);
+    Route::delete('/deleteBulk/spekteks', [SpektekController::class, 'bulkSoftDelete']);
 
     // Sub Spektek
     Route::post('/sub-spekteks', [SubSpektekController::class, 'create']);

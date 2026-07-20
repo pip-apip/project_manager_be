@@ -28,7 +28,7 @@ class SpektekCreateRequest extends FormRequest
             'name' => 'required|string|max:255',
             'type' => 'required|in:hardware,software',
             'qty_total' => 'required|integer|min:0',
-            'qty_recived' => 'nullable|integer|min:0',
+            'qty_received' => 'nullable|integer|min:0',
             'qty_nominal' => 'nullable|integer|min:0',
             'total_nominal' => 'required|integer|min:0',
             'progress_percentage' => 'nullable|numeric|min:0|max:100',
@@ -43,8 +43,8 @@ class SpektekCreateRequest extends FormRequest
         return [
             'name.required' => 'Nama spektek harus diisi',
 
-            'qty_recived.integer' => 'Jumlah diterima harus berupa angka',
-            'qty_recived.min' => 'Jumlah diterima tidak boleh kurang dari 0',
+            'qty_received.integer' => 'Jumlah diterima harus berupa angka',
+            'qty_received.min' => 'Jumlah diterima tidak boleh kurang dari 0',
 
             'qty_total.required' => 'Jumlah total harus diisi',
             'qty_total.integer' => 'Jumlah total harus berupa angka',
@@ -67,7 +67,7 @@ class SpektekCreateRequest extends FormRequest
             'qty_nominal' => $this->qty_nominal ?? null,
             'total_nominal' => $this->total_nominal ?? null,
             'progress_percentage' => $this->progress_percentage ?? null,
-            'qty_recived' => $this->qty_recived ?? null,
+            'qty_received' => $this->qty_received ?? null,
             'detail' => $this->detail ?? null,
             'note' => $this->note ?? null,
             'project_id' => $this->project_id ?? null,

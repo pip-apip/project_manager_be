@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Response;
 use App\Http\Requests\SpektekBulkCreateRequest;
+use App\Http\Requests\SpektekBulkUpdateRequest;
 use App\Http\Requests\SpektekCreateRequest;
 use App\Http\Requests\SpektekUpdateRequest;
 use App\Http\Resources\SpektekResource;
@@ -304,6 +305,84 @@ class SpektekController extends Controller
         }
     }
 
+    public function bulkUpdate(SpektekBulkUpdateRequest $request): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $errors = [];
+            $updated = [];
+
+            foreach ($request->validated() as $item) {
+
+                $spektek = Spektek::find($item['id']);
+
+                if (!$spektek) {
+                    $errors[] = [
+                        'id' => $item['id'],
+                        'message' => 'Spektek tidak ditemukan'
+                    ];
+
+                    continue;
+                }
+
+                $data = collect($item)->only([
+                    'name',
+                    'type',
+                    'qty_total',
+                    'qty_nominal',
+                    'total_nominal',
+                    'detail',
+                    'note',
+                    'project_id'
+                ])->toArray();
+
+                $qtyTotal = $data['qty_total'] ?? $spektek->qty_total;
+                $totalNominal = $data['total_nominal'] ?? $spektek->total_nominal;
+
+                if ($qtyTotal !== null && $totalNominal !== null) {
+                    $data['qty_nominal'] = $qtyTotal == 0
+                        ? 0
+                        : $totalNominal / $qtyTotal;
+                }
+
+                $spektek->update($data);
+
+                $updated[] = $spektek->fresh();
+            }
+
+            if (count($errors)) {
+                DB::rollBack();
+
+                return Response::handler(
+                    400,
+                    'Beberapa data gagal diupdate',
+                    [],
+                    [],
+                    $errors
+                );
+            }
+
+            DB::commit();
+
+            return Response::handler(
+                200,
+                'Spektek berhasil diupdate',
+                SpektekResource::collection(collect($updated))
+            );
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            return Response::handler(
+                500,
+                'Gagal mengupdate spektek',
+                [],
+                [],
+                $e->getMessage()
+            );
+        }
+    }
+
     public function updateQtyReceived($id, SpektekUpdateRequest $request): JsonResponse
     {
         try {
@@ -407,6 +486,65 @@ class SpektekController extends Controller
             );
 
         } catch (\Exception $e) {
+            return Response::handler(
+                500,
+                'Gagal menghapus spektek',
+                [],
+                [],
+                $e->getMessage()
+            );
+        }
+    }
+
+    public function bulkSoftDelete(Request $request): JsonResponse
+    {
+        DB::beginTransaction();
+
+        try {
+            $errors = [];
+            $deleted = [];
+
+            foreach ($request->all() as $id) {
+
+                $spektek = Spektek::find($id);
+
+                if (!$spektek) {
+                    $errors[] = [
+                        'id' => $item['id'],
+                        'message' => 'Spektek tidak ditemukan'
+                    ];
+
+                    continue;
+                }
+
+                $spektek->delete();
+
+                $deleted[] = $spektek->fresh();
+            }
+
+            if (count($errors)) {
+                DB::rollBack();
+
+                return Response::handler(
+                    400,
+                    'Beberapa data gagal dihapus',
+                    [],
+                    [],
+                    $errors
+                );
+            }
+
+            DB::commit();
+
+            return Response::handler(
+                200,
+                'Spektek berhasil dihapus',
+                // SpektekResource::collection(collect($deleted))
+            );
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
             return Response::handler(
                 500,
                 'Gagal menghapus spektek',

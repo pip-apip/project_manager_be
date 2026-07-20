@@ -28,7 +28,7 @@ class SpektekUpdateRequest extends FormRequest
             'name' => 'sometimes|required|string|max:255',
             'type' => 'sometimes|required|in:hardware,software',
             'qty_total' => 'sometimes|required|integer|min:0',
-            'qty_recived' => 'sometimes|nullable|integer|min:0',
+            'qty_received' => 'sometimes|nullable|integer|min:0',
             'qty_nominal' => 'sometimes|required|integer|min:0',
             'total_nominal' => 'sometimes|required|integer|min:0',
             'percentage' => 'sometimes|nullable|numeric|min:0|max:100',
@@ -43,8 +43,8 @@ class SpektekUpdateRequest extends FormRequest
         return [
             'name.required' => 'Nama spektek harus diisi',
 
-            'qty_recived.integer' => 'Jumlah diterima harus berupa angka',
-            'qty_recived.min' => 'Jumlah diterima tidak boleh kurang dari 0',
+            'qty_received.integer' => 'Jumlah diterima harus berupa angka',
+            'qty_received.min' => 'Jumlah diterima tidak boleh kurang dari 0',
 
             'qty_total.required' => 'Jumlah total harus diisi',
             'qty_total.integer' => 'Jumlah total harus berupa angka',
@@ -80,8 +80,8 @@ class SpektekUpdateRequest extends FormRequest
         if ($this->has('progress_percentage')) {
             $data['progress_percentage'] = $this->input('progress_percentage');
         }
-        if ($this->has('qty_recived')) {
-            $data['qty_recived'] = $this->input('qty_recived');
+        if ($this->has('qty_received')) {
+            $data['qty_received'] = $this->input('qty_received');
         }
         if ($this->has('detail')) {
             $data['detail'] = $this->input('detail');
