@@ -36,7 +36,7 @@ class SpektekResource extends JsonResource
             //         'name' => $sub->name,
             //         'type' => $sub->type,
             //         'qty_total' => (int) $sub->qty_total ?? 0,
-            //         'qty_recived' => (int) $sub->qty_recived ?? 0,
+            //         'qty_received' => (int) $sub->qty_received ?? 0,
             //         'total_nominal' => (int) $sub->total_nominal ?? 0,
             //         'qty_nominal' => (int) $sub->qty_nominal ?? 0,
             //         'progress_percentage' => $sub->arrivalPercentage,

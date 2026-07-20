@@ -193,7 +193,7 @@ class ProjectController extends Controller
                 $total = 0;
 
                 foreach ($spektek as $item) {
-                    $qtyReceived = $item->qty_recived ?? 0;
+                    $qtyReceived = $item->qty_received ?? 0;
                     $qtyNominal  = $item->qty_nominal ?? 0;
 
                     $total += ($qtyReceived * $qtyNominal);

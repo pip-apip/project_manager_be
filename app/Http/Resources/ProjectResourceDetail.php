@@ -39,19 +39,20 @@ class ProjectResourceDetail extends JsonResource
                 : '',
             'project_leader_id' => optional($this->projectLeader)->id,
             'project_leader_name' => optional($this->projectLeader)->name,
-            'specktech' => $this->activityCategories->map(function ($category) {
-                return [
-                    'id' => $category->id,
-                    'name' => $category->name,
-                    'qty_total' => $category->qty_total,
-                    'qty_recived' => $category->qty_recived,
-                    'total_nominal' => $category->total_nominal,
-                    'qty_nominal' => $category->qty_nominal,
-                    'percentage' => $category->value,
-                    'note' => $category->note,
-                    'images' => $category->images
-                ];
-            }),
+            // 'specktech' => $this->activityCategories->map(function ($category) {
+            //     return [
+            //         'id' => $category->id,
+            //         'name' => $category->name,
+            //         'qty_total' => $category->qty_total,
+            //         'qty_received' => $category->qty_received,
+            //         'total_nominal' => $category->total_nominal,
+            //         'qty_nominal' => $category->qty_nominal,
+            //         'percentage' => $category->value,
+            //         'note' => $category->note,
+            //         'images' => $category->images
+            //     ];
+            // }),
+            'specktech' => SpektekResource::collection($this->spekteks),
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
             'created_at' => $this->created_at,
