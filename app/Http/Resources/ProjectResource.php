@@ -39,10 +39,11 @@ class ProjectResource extends JsonResource
                 : '',
             'project_leader_id' => optional($this->projectLeader)->id,
             'project_leader_name' => optional($this->projectLeader)->name,
-            'specktech' => $this->activityCategories->map(function ($category) {
+            'specktech' => $this->spekteks->map(function ($category) {
                 return [
                     'id' => $category->id,
-                    'name' => $category->name
+                    'name' => $category->name,
+                    'type' => $this->type,
                 ];
             }),
             'start_date' => $this->start_date,
