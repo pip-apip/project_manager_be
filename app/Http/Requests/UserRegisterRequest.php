@@ -26,6 +26,7 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'required|integer|unique:tm_users,id',
             'username' => 'required|string|max:50',
             'password' => 'required|string|max:255',
             'name' => 'required|string|max:100',
@@ -35,6 +36,10 @@ class UserRegisterRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'id.required' => 'ID wajib diisi.',
+            'id.integer' => 'ID harus berupa angka.',
+            'id.unique' => 'ID sudah digunakan.',
+
             'username.required' => 'Username wajib diisi.',
             'username.string' => 'Username harus berupa teks.',
             'username.max' => 'Username tidak boleh lebih dari 50 karakter.',
