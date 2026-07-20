@@ -6,6 +6,7 @@ use App\Helpers\Response;
 use App\Http\Requests\SubSpektekCreateRequest;
 use App\Http\Requests\SubSpektekUpdateRequest;
 use App\Http\Resources\SubSpektekResource;
+use App\Models\Spektek;
 use App\Models\SubSpektek;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
@@ -29,6 +30,30 @@ class SubSpektekController extends Controller
                     [],
                     [],
                     ['name' => ['Nama sub spektek sudah ada.']]
+                );
+            }
+
+            $qtyMainSpektek = Spektek::findOrFail($request->spektek_id)->qty_total;
+
+            if ($request->qty_total > $qtyMainSpektek) {
+                return Response::handler(
+                    400,
+                    'Gagal membuat Sub Spektek',
+                    [],
+                    [],
+                    ['qty_total' => ['Jumlah sub spektek tidak boleh melebihi jumlah spektek utama.']]
+                );
+            }
+
+            $nominalMainSpektek = Spektek::findOrFail($request->spektek_id)->total_nominal;
+
+            if ($request->has('total_nominal') && $request->total_nominal > $nominalMainSpektek) {
+                return Response::handler(
+                    400,
+                    'Gagal membuat Sub Spektek',
+                    [],
+                    [],
+                    ['total_nominal' => ['Nominal sub spektek tidak boleh melebihi nominal spektek utama.']]
                 );
             }
 
@@ -56,7 +81,6 @@ class SubSpektekController extends Controller
             );
         }
     }
-
 
     public function getAll(): JsonResponse
     {
